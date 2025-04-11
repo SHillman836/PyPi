@@ -28,6 +28,7 @@ jobs:
 
       - name: Publish dist to PyPI
         run: |
+          source venv/bin/activate
           twine upload dist/* \
           --username __token__ \
           --password ${{ secrets.PYPI_API_TOKEN }}
