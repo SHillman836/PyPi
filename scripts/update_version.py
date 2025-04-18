@@ -21,7 +21,6 @@ def parse_args():
     args = parser.parse_args()
     return args.new_version
 
-
 def load_config():
     try: 
         with open(config_json_path, "r") as json_data:

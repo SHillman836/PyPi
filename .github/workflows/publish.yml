@@ -10,10 +10,17 @@ on:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      
+      - name: Setup Git
+        run: |
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -27,10 +34,16 @@ jobs:
           pip install --upgrade pip
           pip install -r src/requirements.txt
 
-      - name: Bump version in config.json
+      - name: Update version in config.json
         run: |
           source venv/bin/activate
           python scripts/update_version.py ${{ github.event.inputs.version }}
+      
+      - name: Commit version change
+        run: |
+          git add .
+          git commit -m "Update version to ${{ github.event.inputs.version }}"
+          git push origin HEAD:main
 
       - name: Build package
         run: |
