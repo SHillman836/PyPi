@@ -4,7 +4,7 @@ from pathlib import Path
 from setuptools import setup, find_packages
 
 
-config_json_path = Path(__file__).joinpath("config.json")
+config_json_path = Path(__file__).parent.joinpath("config.json")
 
 def read_version():
     try:

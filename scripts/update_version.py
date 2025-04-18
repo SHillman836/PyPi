@@ -2,14 +2,22 @@ import json
 import sys
 import argparse
 from pathlib import Path
-from setuptools import setup, find_packages
+import re
 
 
-config_json_path = Path(__file__).parent.joinpath("config.json")
+SEMVER_RE = re.compile(r'^\d+\.\d+\.\d+$')
+config_json_path = Path(__file__).parent.parent.joinpath("config.json")
+
+def semver_type(value: str) -> str:
+    if not SEMVER_RE.match(value):
+        raise argparse.ArgumentTypeError(
+            f"Invalid version '{value}': must be in format X.Y.Z"
+        )
+    return value
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("new_version", type=str)
+    parser.add_argument("new_version",  type=semver_type)
     args = parser.parse_args()
     return args.new_version
 
